@@ -19,30 +19,15 @@ skip repeated explanations and jump straight into work.
 
 ---
 
-## Commands
+## IMPORTANT: First Action When This Skill Is Invoked
 
-| Command | Action |
-|---------|--------|
-| `/context` | Start project analysis (mode selection first) |
-| `/context fast` | Skip questions, generate from files immediately |
-| `/context frontend` | Interview mode, frontend-specific |
-| `/context unity` | Interview mode, Unity-specific |
-| `/context backend` | Interview mode, backend-specific |
+**You MUST follow this routing logic BEFORE doing anything else. Do NOT skip this step.**
 
-**Related skills (separate commands):**
+1. If the user ran `/context fast` → go directly to **Fast Mode**
+2. If the user ran `/context frontend`, `/context unity`, or `/context backend` → go directly to **Interview Mode**
+3. If the user ran `/context` (no arguments) → **STOP and ask the mode selection below. Do NOT proceed until the user answers.**
 
-| Command | Action |
-|---------|--------|
-| `/save [path]` | Save the current Context Document to a file |
-| `/show` | Print the current Context Document |
-| `/update` | Add or modify sections in an existing Context Document |
-| `/help` | Print command list |
-
----
-
-## Entry Flow
-
-When the user runs `/context` **without arguments**, ask the mode selection first:
+**Mode selection prompt (print this exactly when no arguments are given):**
 
 ```
 How would you like to analyze this project?
@@ -53,11 +38,23 @@ How would you like to analyze this project?
   (tip: /context fast to skip this prompt next time)
 ```
 
-- **User picks 1 (or "fast", "빠르게", "바로")** → proceed to **Fast Mode**
-- **User picks 2 (or "interview", "인터뷰", "질문")** → proceed to **Interview Mode**
+**Wait for the user's answer**, then route:
+- **1, "fast", "빠르게", "바로"** → **Fast Mode**
+- **2, "interview", "인터뷰", "질문"** → **Interview Mode**
 
-When the user runs `/context fast`, `/context frontend`, `/context unity`, or `/context backend`,
-skip this prompt and proceed directly to the corresponding mode.
+---
+
+## Commands
+
+| Command | Action |
+|---------|--------|
+| `/context` | Start project analysis (mode selection first) |
+| `/context fast` | Skip questions, generate from files immediately |
+| `/context frontend` | Interview mode, frontend-specific |
+| `/context unity` | Interview mode, Unity-specific |
+| `/context backend` | Interview mode, backend-specific |
+
+**Related skills (separate commands):** `/save [path]`, `/show`, `/update`, `/help`
 
 ---
 
