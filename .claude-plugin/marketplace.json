@@ -12,7 +12,7 @@
       "name": "daim",
       "description": "Quickly understand new projects and generate token-efficient Context Documents.",
       "version": "1.0.0",
-      "source": "./plugins/daim",
+      "source": ".",
       "category": "development",
       "author": {
         "name": "DAIM Research"
