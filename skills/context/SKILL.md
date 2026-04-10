@@ -1,5 +1,5 @@
 ---
-name: daim
+name: context
 description: |
   Skill for quickly understanding a new project or codebase and generating
   a token-efficient, reusable Context Document.

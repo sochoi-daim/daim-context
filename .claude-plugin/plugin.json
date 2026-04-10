@@ -1,7 +1,6 @@
 {
   "name": "daim",
   "version": "1.0.0",
-  "description": "Quickly understand new projects and generate token-efficient Context Documents. Specialized for Web (React/Vue) and Unity (URP) projects.",
-  "author": "DAIM Research",
-  "skills": ["daim"]
+  "description": "Quickly understand new projects and generate token-efficient Context Documents. Specialized for Frontend (React/Next.js/Vue), Unity (URP), and Backend (Express/NestJS) projects.",
+  "author": "DAIM Research"
 }
