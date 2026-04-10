@@ -10,7 +10,7 @@
 
 ## 지원 프로젝트 타입
 
-- **웹**: React, Next.js, Vue, Nuxt
+- **웹**: React, Next.js, Vue
 - **유니티**: Unity (URP/HDRP/Built-in), REST API / WebSocket / Photon / Mirror 서버 연동 포함
 - **백엔드**: Node.js (Express / NestJS)
 
