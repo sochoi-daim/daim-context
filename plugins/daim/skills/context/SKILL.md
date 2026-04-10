@@ -4,10 +4,11 @@ description: |
   Skill for quickly understanding a new project or codebase and generating
   a token-efficient, reusable Context Document.
   Specialized for Frontend (React, Next.js, Vue), Unity (URP), and Backend (Express, NestJS) projects.
-  Triggered by "/context", "/context fast", "/update", "/save" commands.
+  Triggered by "/context", "/context fast", "/context frontend", "/context unity", "/context backend" commands.
   Also triggered by requests like "analyze this project", "create a context document",
-  "generate context without questions", "save the context".
+  "generate context without questions".
   Covers new projects, unfamiliar modules, and handover scenarios.
+  Related commands: /save, /show, /update, /help (separate skills).
 ---
 
 # Dev Context Guide
@@ -22,14 +23,41 @@ skip repeated explanations and jump straight into work.
 
 | Command | Action |
 |---------|--------|
-| `/context` | Start project analysis (interview + file scan) |
-| `/context frontend` | Start with frontend-specific interview |
-| `/context unity` | Start with Unity-specific interview |
-| `/context fast` | Generate document immediately from files only (no questions) |
-| `/update` | Add or modify sections in an existing Context Document |
+| `/context` | Start project analysis (mode selection first) |
+| `/context fast` | Skip questions, generate from files immediately |
+| `/context frontend` | Interview mode, frontend-specific |
+| `/context unity` | Interview mode, Unity-specific |
+| `/context backend` | Interview mode, backend-specific |
+
+**Related skills (separate commands):**
+
+| Command | Action |
+|---------|--------|
 | `/save [path]` | Save the current Context Document to a file |
 | `/show` | Print the current Context Document |
+| `/update` | Add or modify sections in an existing Context Document |
 | `/help` | Print command list |
+
+---
+
+## Entry Flow
+
+When the user runs `/context` **without arguments**, ask the mode selection first:
+
+```
+How would you like to analyze this project?
+
+  1) Fast — scan files and generate immediately (no questions)
+  2) Interview — Q&A for higher accuracy
+
+  (tip: /context fast to skip this prompt next time)
+```
+
+- **User picks 1 (or "fast", "빠르게", "바로")** → proceed to **Fast Mode**
+- **User picks 2 (or "interview", "인터뷰", "질문")** → proceed to **Interview Mode**
+
+When the user runs `/context fast`, `/context frontend`, `/context unity`, or `/context backend`,
+skip this prompt and proceed directly to the corresponding mode.
 
 ---
 
@@ -56,22 +84,16 @@ After generation, all `[needs confirmation]` items are collected and presented t
 
 ---
 
-## `/context fast` — Instant Generation (No Questions)
+## Fast Mode
 
-Attach files/code and get a Context Document **immediately with no questions**.
-Only confirmed information is filled in; the rest is tagged.
-
-**Usage:**
-```
-/context fast
-[attach files or code]
-```
+Generate a Context Document **immediately with no questions** by scanning the project files.
 
 **Steps:**
 1. Auto-detect project type (file structure, extensions, meta files)
 2. Auto-detect framework
    - Frontend: `package.json` dependencies → React / Vue / other
    - Unity: `ProjectVersion.txt`, `*.asmdef`, scene files
+   - Backend: `package.json`, `Dockerfile`, framework-specific files
 3. Fill only verifiable items; mark uncertain items with `[inferred]` / `[needs confirmation]`
 4. Output Context Document immediately
 5. Collect and present `[needs confirmation]` items:
@@ -86,13 +108,14 @@ Run /save [path] after confirming.
 
 ---
 
-## `/context` — Interview-Based Analysis
+## Interview Mode
 
 Build a high-accuracy document through Q&A. Works even without files.
 
 ### Step 1. Identify Project Type
 
-If files/code are attached → auto-analyze, skip to Step 3
+If files/code are attached → auto-analyze, skip to Step 3.
+If type was specified via argument (e.g. `/context frontend`) → skip to Step 2.
 Otherwise → ask:
 
 ```
@@ -161,81 +184,12 @@ Run /save [path] to save. Let me know if anything is incorrect.
 
 ---
 
-## `/update` — Update Document
+## After Generation
 
-Add or modify content in an existing Context Document.
-
-```
-What would you like to update?
-  1) Add new module/feature
-  2) Change current work context
-  3) Add notes/caveats
-  4) Free-form input
-```
-
-After selection, modify only the relevant section and re-output the full document.
-Remove tags from updated items and mark them as confirmed.
-
----
-
-## `/show` — Display Current Document
-
-Print the current Context Document to the conversation.
-
-Useful to review the document after generation or updates before saving.
+Once the Context Document is generated, remind the user of available next steps:
 
 ```
-/show
-```
-
-If no document has been generated yet:
-```
-No Context Document in this session. Run /context or /context fast first.
-```
-
----
-
-## `/help` — Print Command List
-
-Print a summary of all available commands and their descriptions.
-
-```
-/daim:help
-```
-
-Output:
-```
-daim — Dev Context Guide
-
-Commands:
-  /daim:context            Start interview-based project analysis
-  /daim:context frontend   Start with frontend-specific interview
-  /daim:context unity      Start with Unity-specific interview
-  /daim:context fast       Generate document from files only (no questions)
-  /daim:update             Update an existing Context Document
-  /daim:save [path]        Save document to a file
-  /daim:show               Print current document
-  /daim:help               Print this command list
-```
-
----
-
-## `/save [path]` — Save to File
-
-Save the Context Document as a markdown file.
-Warn if `[needs confirmation]` items remain:
-
-```
-Warning: 2 items still marked [needs confirmation]. Save anyway? (y/n)
-```
-
-- No path given: `./context-[project-name]-[date].md`
-- Path given: save to that path
-
-```
-/save                          → ./context-myapp-20260410.md
-/save ./docs/                  → ./docs/context-myapp-20260410.md
-/save ./docs/myapp-context.md  → ./docs/myapp-context.md
+/save [path] — save to file  |  /show — review  |  /update — modify sections
 ```
 
 ---
